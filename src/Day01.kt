@@ -1,31 +1,7 @@
 fun main() {
-    fun part1(input: List<String>): Int {
-        var count = 0
-        var previous : Int? = null
-         input.forEach {
-             if(previous != null && previous!! < it.toInt()){
-                 count++
-             }
-             previous = it.toInt()
-         }
-        return count
-    }
+    fun part1(input: List<String>): Int = input.map { it.toInt() }.zipWithNext().count { (x, y) -> y > x }
 
-    fun part2(input: List<String>): Int {
-        var count = 0
-        var previous : Int? = null
-        var previousPrevious : Int? = null
-        var previousSum : Int? = null
-        input.forEach { current ->
-            if(previousSum != null && previousSum!! < (previousPrevious!! + previous!! + current.toInt())){
-                count++
-            }
-            previousSum = previousPrevious?.let { it + previous!! + current.toInt()}
-            previousPrevious = previous
-            previous = current.toInt()
-        }
-        return count
-    }
+    fun part2(input: List<String>): Int = input.asSequence().map { it.toInt() }.windowed(3).map { it.sum() }.zipWithNext().count { (x, y) -> y > x }
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day01_test")
